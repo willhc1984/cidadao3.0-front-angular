@@ -1,0 +1,33 @@
+<div class="app-wrapper">
+  <!-- Injeta o HTML do Header aqui -->
+  <app-header 
+    [isDarkMode]="isDarkMode()"
+    (themeToggle)="toggleTheme()">
+  </app-header> 
+  
+  <!-- Injeta o HTML do Sidebar aqui -->
+  <app-sidebar></app-sidebar> 
+  
+  <!-- O miolo branco da página -->
+  <main class="app-main">
+    <div class="app-content-header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-6">
+            <h3 class="mb-0">Conteúdo</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="app-content">
+      <div class="container-fluid">
+        <!-- As telas do seu sistema vão aparecer AQUI dentro -->
+        <router-outlet></router-outlet> 
+      </div>
+    </div>
+  </main>
+
+  <!-- Injeta o HTML do Footer aqui -->
+  <app-footer></app-footer> 
+  
+</div>
