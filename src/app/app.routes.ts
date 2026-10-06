@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     // Rota publica de Login
@@ -8,8 +10,14 @@ export const routes: Routes = [
     },
     {
         path: '',
-        loadComponent: () => import('./layout/admin-layout/admin-layout.component').then(m => m.AdminLayoutComponent),
+        component: AdminLayoutComponent,
+        canActivate: [authGuard],
         children: [
+            {
+                path: '',
+                redirectTo: 'home',
+                pathMatch: 'full'
+            },
             {
                 path: 'home',
                 loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)

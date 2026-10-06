@@ -9,26 +9,54 @@
           class="img-fluid mb-4" 
           style="max-width: 250px;"
         >
-        
+
       </div>
       <div class="card-body login-card-body">
         <p class="login-box-msg">Faça login para iniciar sua sessão</p>
         
-        <!-- Formulário simples de login -->
-        <form>
+        <!-- Mensagem de erro se houver-->
+        @if(errorMessage()){
+          <div class="alert alert-danger text-center p-2 mb-3" role="alert">
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <!-- Formulário ligado aos Signals-->
+        <form (submit)="entrar(); $event.preventDefault()">
           <div class="input-group mb-3">
-            <input type="email" class="form-control" placeholder="Login">
+            <input 
+                type="email" 
+                class="form-control" 
+                placeholder="Login"
+                [ngModel]="login()"
+                (ngModelChange)="login.set($event)"
+                name="login"
+                requred
+            >
             <div class="input-group-text"><span class="bi bi-envelope"></span></div>
           </div>
           
           <div class="input-group mb-3">
-            <input type="password" class="form-control" placeholder="Senha">
+            <input 
+                type="password" 
+                class="form-control" 
+                placeholder="Senha"
+                [ngModel]="senha()"
+                (ngModelChange)="senha.set($event)"
+                name="senha"
+                required  
+            >
             <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
           </div>
           
           <div class="row">
             <div class="col-12">
-              <button type="submit" class="btn btn-primary w-100">Entrar</button>
+              <button type="submit" class="btn btn-primary w-100" [disabled]="isLoading()">
+                 @if(isLoading()){
+                <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                }
+                Entrar
+              </button>             
             </div>
           </div>
         </form>

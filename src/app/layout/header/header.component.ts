@@ -1,4 +1,6 @@
-import { Component, effect, input, output, signal } from '@angular/core';
+import { Component, effect, inject, input, output, signal } from '@angular/core';
+import { AuthenticationService } from '../../services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +15,14 @@ export class HeaderComponent {
 
   //Avisa o AdminLayout que botão foi clicado
   themeToggle = output<void>();
+
+  private authService = inject(AuthenticationService);
+  private router = inject(Router);
+
+  logout(){
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 
   onToggle(){
     this.themeToggle.emit();
