@@ -13,7 +13,7 @@ import { FooterComponent } from '../footer/footer.component';
 
 export class AdminLayoutComponent {
 
-   // Signal guarda se o omodo escuro esta on/off
+   // Signal guarda se o o modo escuro esta on/off
   isDarkMode = signal<boolean>(false);
 
   constructor(){
