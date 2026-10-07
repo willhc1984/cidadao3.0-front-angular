@@ -17,7 +17,6 @@ export class AuthenticationService {
   // Guarda o token na memoria quando login da certo
   token: string | null = null;
 
-
   authenticate(request: AuthenticationRequest): Observable<AuthenticationResponse>{
     return this.http.post<AuthenticationResponse>(this.API_URL, request).pipe(
       tap((response) => {
