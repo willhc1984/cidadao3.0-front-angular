@@ -55,6 +55,16 @@ export class MeusAtendimentosComponent {
     }
   }
 
+  // Formata o texto que vem da API do campo estado 
+  formatarDescricaoEstado(descricao: string): string{
+    if(!descricao) return 'Desconhecido';
+
+    return descricao
+      .toLowerCase()
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, (l) => l.toUpperCase())
+  }
+
   // Mudar cor de badge no HTML
   obterCorBadgeEstado(estadoDescricao: string): string {
     switch(estadoDescricao){
@@ -72,5 +82,17 @@ export class MeusAtendimentosComponent {
         return 'bg-light text-dark';
     }
   }
+
+  // Método chamado quando usuário alterar quantidade de registros no select
+  mudarPageSize(event: Event){
+    const selectElement = event.target as HTMLSelectElement;
+    const novoTamanho = Number(selectElement.value);
+
+    this.pageSize.set(novoTamanho);
+    this.currentPage.set(0);
+    this.carregarAtendimentos();
+  }
+
+
 
 }
