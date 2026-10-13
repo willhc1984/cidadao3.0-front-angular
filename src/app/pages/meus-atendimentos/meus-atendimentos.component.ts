@@ -1,0 +1,76 @@
+import { CommonModule } from '@angular/common';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Component, inject, signal } from '@angular/core';
+
+@Component({
+  selector: 'app-meus-atendimentos',
+  imports: [CommonModule],
+  templateUrl: './meus-atendimentos.component.html',
+  styleUrl: './meus-atendimentos.component.scss'
+})
+
+export class MeusAtendimentosComponent {
+  private http = inject(HttpClient);
+
+  // Signals para armazenar o estado da tela
+  atendimentos = signal<any[]>([]);
+  totalPages = signal(0);
+  totalElements = signal(0);
+  currentPage = signal(0);
+  pageSize = signal(10);
+  isLoading = signal(true);
+
+  ngOnInit(){
+    this.carregarAtendimentos();
+  }
+
+  carregarAtendimentos(){
+    this.isLoading.set(true);
+    // Envia os parametros de paginação (page e pageLength) que o backend espera
+    const params = new HttpParams()
+      .set('page', this.currentPage())
+      .set('pageLength', this.pageSize());
+
+  // Requisição para o endpoint Java Spring
+  this.http.get<any>('http://localhost:8081/atendimentos/cidadao/meus-atendimentos', { params }).subscribe({
+      next: (res) => {
+        // O PageDTO do Java retorna 'elements', 'totalPages', 'totalElements'
+        this.atendimentos.set(res.elements || []);
+        this.totalPages.set(res.totalPages);
+        this.totalElements.set(res.totalElements || 0);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Erro ao buscar atendimentos do cidadão: ', err);
+        this.isLoading.set(false);
+      }
+    })
+  }
+
+  // Método disparado pelos botões de paginação HTML
+  mudarPagina(novaPagina: number) {
+    if(novaPagina >= 0 && novaPagina <this.totalPages()){
+      this.currentPage.set(novaPagina);
+      this.carregarAtendimentos();
+    }
+  }
+
+  // Mudar cor de badge no HTML
+  obterCorBadgeEstado(estadoDescricao: string): string {
+    switch(estadoDescricao){
+      case 'ABERTO':
+        return 'bg-primary';
+      case 'EM_ANDAMENTO':
+        return 'bg-info';
+      case 'AGUARDANDO':
+        return 'bg-warning text-dark';
+      case 'FECHADO':
+        return 'bg-success';
+      case 'ARQUIVADO':
+        return 'bg-secondary';
+      default:
+        return 'bg-light text-dark';
+    }
+  }
+
+}

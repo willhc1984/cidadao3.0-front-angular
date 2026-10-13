@@ -50,7 +50,8 @@ export class LoginComponent {
             );
 
             if(cidadaoVinculado){
-              // Sucesso: o usuário é um cidadao válido
+              // Sucesso: o usuário é um cidadao válido - salva o login do usuário em localStorage
+              localStorage.setItem('usuario_login', credentials.login);
               this.router.navigate(['/home']);
             }else{
               // Bloqueio: usuario não é um cidadão válido

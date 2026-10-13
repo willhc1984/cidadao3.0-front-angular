@@ -1,0 +1,124 @@
+<main class="app-main">
+  <!-- Cabeçalho da Página (Breadcrumb) -->
+  <div class="app-content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6">
+          <h1 class="mb-0 fs-3">Portal do Cidadão</h1>
+        </div>
+        <div class="col-sm-6">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb float-sm-end">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Meus Atendimentos</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="app-content">
+    <div class="container-fluid">
+      <div class="card mb-4">
+        
+        <!-- Header do Card com Barra de Pesquisa -->
+        <div class="card-header">
+          <h3 class="card-title">Acompanhamento de Atendimentos</h3>
+          <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 16rem">
+              <span class="input-group-text">
+                <i class="bi bi-search" aria-hidden="true"></i>
+              </span>
+              <input
+                id="table-filter"
+                type="search"
+                class="form-control"
+                placeholder="Filtrar atendimentos&hellip;"
+                aria-label="Filter rows"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Corpo do Card -->
+        <div class="card-body">
+          <!-- Botões de Ação Visual (Opcional) -->
+          <div class="d-flex gap-2 mb-3">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+              <i class="bi bi-filetype-csv me-1" aria-hidden="true"></i> Export CSV
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+              <i class="bi bi-printer me-1" aria-hidden="true"></i> Print
+            </button>
+          </div>
+
+          <!-- Tabela Responsiva com os Dados do Spring Boot -->
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Data</th>
+                  <th>Descrição</th>
+                  <th>Estado</th>
+                  <th>Protocolo</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (isLoading()) {
+                  <tr>
+                    <td colspan="5" class="text-center py-3">Carregando atendimentos...</td>
+                  </tr>
+                } @else {
+                  @for (item of atendimentos(); track item.id) {
+                    <tr>
+                      <td>{{ item.id }}</td>
+                      <td>{{ item.data | date:'dd/MM/yyyy HH:mm' }}</td>
+                      <td>{{ item.descricao }}</td>
+                      <td><span class="badge bg-info">{{ item.estadoDescricao }}</span></td>
+                      <td>{{ item.protocolo || 'N/A' }}</td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="5" class="text-center py-3">Nenhum atendimento encontrado.</td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Rodapé de Paginação vindo do Java (PageDTO) -->
+          <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mt-3">
+            <div>
+              Total de registros: <strong>{{ totalElements() }}</strong>
+            </div>
+            
+            <nav>
+              <ul class="pagination mb-0">
+                <li class="page-item" [class.disabled]="currentPage() === 0">
+                  <button class="page-link" (click)="mudarPagina(currentPage() - 1)">Anterior</button>
+                </li>
+                <li class="page-item disabled">
+                  <span class="page-link">Página {{ currentPage() + 1 }} de {{ totalPages() || 1 }}</span>
+                </li>
+                <li class="page-item" [class.disabled]="currentPage() + 1 >= totalPages()">
+                  <button class="page-link" (click)="mudarPagina(currentPage() + 1)">Próxima</button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+
+        </div>
+
+        <!-- Rodapé do Card -->
+        <div class="card-footer bg-body text-body-secondary small">
+          Câmara Municipal de Sorocaba &mdash; Portal do Cidadão
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>

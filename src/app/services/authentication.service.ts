@@ -29,7 +29,7 @@ export class AuthenticationService {
   logout(){
     this.token = null;
     localStorage.removeItem('jwt_token');
+    localStorage.removeItem('usuario_login');
   }
-
 
 }
