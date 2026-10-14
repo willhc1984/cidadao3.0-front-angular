@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
-import { PageResponse } from '../../models/page.model';
+import { AtendimentosService } from '../../services/atendimentos.service';
 
 @Component({
   selector: 'app-meus-atendimentos',
@@ -12,6 +12,7 @@ import { PageResponse } from '../../models/page.model';
 
 export class MeusAtendimentosComponent {
   private http = inject(HttpClient);
+  private atendimentoService = inject(AtendimentosService);
 
   // Signals para armazenar o estado da tela
   atendimentos = signal<any[]>([]);
@@ -33,8 +34,8 @@ export class MeusAtendimentosComponent {
       .set('pageLength', this.pageSize());
 
   // Requisição para o endpoint Java Spring
-  this.http.get<PageResponse<any>>('http://localhost:8081/atendimentos/cidadao/meus-atendimentos', { params }).subscribe({
-      next: (res) => {
+  this.atendimentoService.buscarAtendimentos(this.currentPage(), this.pageSize()).subscribe({
+    next: (res) => {
         // O PageDTO do Java retorna 'elements', 'totalPages', 'totalElements'
         this.atendimentos.set(res.elements || []);
         this.totalPages.set(res.totalPages);
@@ -46,7 +47,7 @@ export class MeusAtendimentosComponent {
         this.isLoading.set(false);
       }
     })
-  }
+  };
 
   // Método disparado pelos botões de paginação HTML
   mudarPagina(novaPagina: number) {
