@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
+import { PageResponse } from '../../models/page.model';
 
 @Component({
   selector: 'app-meus-atendimentos',
@@ -32,7 +33,7 @@ export class MeusAtendimentosComponent {
       .set('pageLength', this.pageSize());
 
   // Requisição para o endpoint Java Spring
-  this.http.get<any>('http://localhost:8081/atendimentos/cidadao/meus-atendimentos', { params }).subscribe({
+  this.http.get<PageResponse<any>>('http://localhost:8081/atendimentos/cidadao/meus-atendimentos', { params }).subscribe({
       next: (res) => {
         // O PageDTO do Java retorna 'elements', 'totalPages', 'totalElements'
         this.atendimentos.set(res.elements || []);
@@ -55,7 +56,7 @@ export class MeusAtendimentosComponent {
     }
   }
 
-  // Formata o texto que vem da API do campo estado 
+  // Formata o texto que vem da API no campo estado 
   formatarDescricaoEstado(descricao: string): string{
     if(!descricao) return 'Desconhecido';
 
@@ -92,7 +93,4 @@ export class MeusAtendimentosComponent {
     this.currentPage.set(0);
     this.carregarAtendimentos();
   }
-
-
-
 }
