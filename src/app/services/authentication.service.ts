@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AuthenticationRequest } from '../models/authentication-request';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { AuthenticationResponse } from '../models/authentication-response';
 
 @Injectable({
@@ -14,6 +14,8 @@ export class AuthenticationService {
 
   // URL do backend
   private readonly API_URL = 'http://localhost:8081/authenticate';
+  private readonly CIDADAO_URL = 'http://localhost:8081/cidadaos';
+
   // Guarda o token na memoria quando login da certo
   token: string | null = null;
 
@@ -22,6 +24,26 @@ export class AuthenticationService {
       tap((response) => {
         this.token = response.token;
         localStorage.setItem('jwt_token', response.token);
+      })
+    );
+  }
+
+  // Verifica se usuário é um cidadão válido no sistema
+  verificarVinculoCidadao(loginUsuario: string): Observable<boolean>{
+    return this.http.get<any>(this.CIDADAO_URL).pipe(
+      map((res) => {
+        const listaCidadaos = Array.isArray(res) ? res : (res?.elements || []);
+        const cidadaoVinculado = listaCidadaos.find(
+          (c: any) => c.usuarioLogin === loginUsuario
+        );
+
+        if(cidadaoVinculado){
+          localStorage.setItem('usuario_login', loginUsuario);
+          return true;
+        }else{
+          this.logout(); //Remove token se não for cidadão válido
+          throw new Error('Acesso negado: usuário não é um cidadão válido no sistema.');
+        }
       })
     );
   }

@@ -11,7 +11,6 @@ import { AtendimentosService } from '../../services/atendimentos.service';
 })
 
 export class MeusAtendimentosComponent {
-  private http = inject(HttpClient);
   private atendimentoService = inject(AtendimentosService);
 
   // Signals para armazenar o estado da tela

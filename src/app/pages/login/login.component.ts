@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -33,33 +34,13 @@ export class LoginComponent {
       senha: this.senha()
     };
 
-    // Subscribe despacha para o Java
-    this.authService.authenticate(credentials).subscribe({
-      next: (response) => {
-        // Login OK! Agora checar se é também um Cidadão na API
-        this.http.get<any>('http://localhost:8081/cidadaos').subscribe({
-          next: (res) => {
-
-            // Descobre onde está a lista: se 'res' ja é um array ou está dentro de content (paginação)
-            const listaCidadaos = Array.isArray(res) ? res : (res?.elements || []);
-            this.isLoading.set(false);
-
-            // Procura na lista se existe algum cidadão com usuarioLogin igual ao login digitado
-            const cidadaoVinculado = listaCidadaos.find(
-              (c: any) => c.usuarioLogin === credentials.login
-            );
-
-            if(cidadaoVinculado){
-              // Sucesso: o usuário é um cidadao válido - salva o login do usuário em localStorage
-              localStorage.setItem('usuario_login', credentials.login);
-              this.router.navigate(['/home']);
-            }else{
-              // Bloqueio: usuario não é um cidadão válido
-              this.authService.logout(); // limpa token
-              this.errorMessage.set('Acesso negado: usuário não é um cidadão válido no sistema.');
-            }
-          }
-        });
+    // Faz autenticação obtendo token, depois valida se é cidadao usando switchMap
+    this.authService.authenticate(credentials).pipe(
+      switchMap(() => this.authService.verificarVinculoCidadao(credentials.login))
+    ).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.router.navigate(['/home']); // Sucesso total e redirecionamento
       },
       error: (err) => {
         this.isLoading.set(false);
@@ -67,8 +48,9 @@ export class LoginComponent {
           this.errorMessage.set('Usuário ou senha inválidos.');
         }else if(err.status === 0){
           this.errorMessage.set('Não foi possivel conectar ao servidor.');
-        }else{
-          this.errorMessage.set('Ocorreu um erro inesperado.');
+        }else{ 
+          // Exibe msg de erro ninda da validação do cidadão
+          this.errorMessage.set(err.message || 'Ocorreu um erro inesperado.');
         }
       }
     });
