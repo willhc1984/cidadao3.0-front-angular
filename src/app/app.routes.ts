@@ -25,6 +25,10 @@ export const routes: Routes = [
             {
                 path: 'meus-atendimentos',
                 loadComponent: () => import('./pages/meus-atendimentos/meus-atendimentos.component').then(m => m.MeusAtendimentosComponent)
+            },
+            {
+                path: 'meus-atendimentos/:id',
+                loadComponent: () => import('./pages/meus-atendimentos-detalhes/meus-atendimentos-detalhes.component').then(m => m.MeusAtendimentosDetalhesComponent)
             }
         ]
     }

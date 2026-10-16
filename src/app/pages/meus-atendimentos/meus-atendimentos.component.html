@@ -24,7 +24,7 @@
         <div class="card-header">
           <h3 class="card-title">Acompanhamento de Atendimentos</h3>
           <div class="card-tools">
-            <div class="input-group input-group-sm" style="width: 16rem">
+            <!-- <div class="input-group input-group-sm" style="width: 16rem">
               <span class="input-group-text">
                 <i class="bi bi-search" aria-hidden="true"></i>
               </span>
@@ -35,7 +35,7 @@
                 placeholder="Filtrar atendimentos&hellip;"
                 aria-label="Filter rows"
               />
-            </div>
+            </div> -->
           </div>
         </div>
 
@@ -71,7 +71,7 @@
                 } @else {
                   @for (item of atendimentos(); track item.id) {
                     <tr>
-                      <td>{{ item.id }}</td>
+                      <td><a href="/meus-atendimentos/{{ item.id }}" class="">{{ item.id }}</a></td>
                       <td>{{ item.data | date:'dd/MM/yyyy HH:mm' }}</td>
                       <td>{{ item.descricao }}</td>
                       <td>

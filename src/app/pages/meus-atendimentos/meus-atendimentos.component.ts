@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { AtendimentosService } from '../../services/atendimentos.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-meus-atendimentos',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './meus-atendimentos.component.html',
   styleUrl: './meus-atendimentos.component.scss'
 })

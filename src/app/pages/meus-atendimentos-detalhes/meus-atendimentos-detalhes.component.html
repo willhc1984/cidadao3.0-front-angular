@@ -1,0 +1,112 @@
+<!-- Cabeçalho da Página (Breadcrumb) -->
+  <div class="app-content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><a href="/meus-atendimentos">Meus Atendimentos</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Atendimento # {{ atendimento()?.id }}</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        @if(isLoading()){
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+        }@else{
+            <!-- Informçaões gerais do atendimento -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-little mb-0">Informações gerais</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <strong>Protocolo:</strong>
+                            <p class="text-muted mb-0">{{ atendimento()?.protocolo || 'Não gerado' }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Data da abertura</strong>
+                            <p class="text-muted mb-0">{{ atendimento()?.data | date:'dd/MM/yyyy HH:mm' }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Estado atual</strong>
+                            <p class="mb-0">
+                                <span class="badge" [ngClass]="obterCorBadgeEstado(atendimento()?.estadoDescricao || atendimento()?.estado)">
+                                    {{ formatarDescricaoEstado(atendimento()?.estadoDescricao || atendimento()?.estado) }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>Descrição/Assunto:</strong>
+                            <p class="text-muted mb-0">{{ atendimento()?.descricao }}</p>
+                        </div>
+                        <div class="col-md-12">
+                            <strong>Texto completo da solicitação:</strong>
+                            <div class="p-3 bg-light rounded border mt-1">
+                                {{ atendimento()?.texto }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção e anexos-->
+            <div class="card shadow-sm">
+                <div class="card-header bg-light d-flex justify-content-between aligh-items-center">
+                    <h5 class="card-title mb-0">Arquivos anexados:</h5>
+                    <span class="badge bg-secondary">{{ anexos().length }} arquivo(s)</span>
+                </div>
+                <div class="card-body p-0">
+                    @if(anexos().length === 0){
+                        <div class="p-4 text-center text-muted">
+                            Nenhum arquivo anexo encontrado para este atendimento
+                        </div>
+                    }@else{
+                        <div class="table-responsive">
+                            <table class="table table-stripped align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Nome do arquivo</th>
+                                        <th>Tipo</th>
+                                        <th>Tamanho</th>
+                                        <th>Data de inclusão</th>
+                                        <th class="text-end">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (anexo of anexos(); track anexo.id){
+                                        <tr>
+                                            <td>
+                                                <i class="bi bi-file-earmark-text me-2"></i>{{ anexo.originalName }}
+                                            </td>
+                                            <td><span class="badge bg-light text-dark border">{{ anexo.contentType }}</span></td>
+                                            <td>{{ (anexo.size / 1024).toFixed(2) }} KB</td>
+                                            <td>{{ anexo.createTime }}</td>
+                                            <td class="text-end">
+                                                <button class="btn btn-sm btn-outline-primary" (click)="baixarAnexo(anexo.id, anexo.originalName)">
+                                                    <i class="bi bi-download"></i>Baixar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

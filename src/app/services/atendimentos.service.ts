@@ -21,4 +21,9 @@ export class AtendimentosService {
     
     return this.http.get<PageResponse<any>>(this.API_URL, { params });
   }
+
+  // Busca dados do atendimento por ID
+  buscarPorId(id: number): Observable<any>{
+    return this.http.get<any>(`http://localhost:8081/atendimentos/${id}`);
+  }
 }
