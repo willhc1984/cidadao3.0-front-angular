@@ -34,11 +34,14 @@ export class AuthenticationService {
       map((res) => {
         const listaCidadaos = Array.isArray(res) ? res : (res?.elements || []);
         const cidadaoVinculado = listaCidadaos.find(
-          (c: any) => c.usuarioLogin === loginUsuario
+          (c: any) => c.usuarioLogin === loginUsuario,
         );
+
+        console.log(cidadaoVinculado);
 
         if(cidadaoVinculado){
           localStorage.setItem('usuario_login', loginUsuario);
+          localStorage.setItem('usuario_nome', cidadaoVinculado.pronomeDeTratamento + ' ' + cidadaoVinculado.nome);
           return true;
         }else{
           this.logout(); //Remove token se não for cidadão válido

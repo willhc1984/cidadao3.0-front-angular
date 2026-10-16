@@ -47,9 +47,13 @@
                                 </span>
                             </p>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <strong>Descrição/Assunto:</strong>
                             <p class="text-muted mb-0">{{ atendimento()?.descricao }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Usuário atendendo</strong>
+                            <p class="text-muted mb-0">{{ atendimento()?.usuarioAtendendo || 'Não informado'}}</p>
                         </div>
                         <div class="col-md-12">
                             <strong>Texto completo da solicitação:</strong>
@@ -92,7 +96,7 @@
                                             </td>
                                             <td><span class="badge bg-light text-dark border">{{ anexo.contentType }}</span></td>
                                             <td>{{ (anexo.size / 1024).toFixed(2) }} KB</td>
-                                            <td>{{ anexo.createTime }}</td>
+                                            <td>{{ anexo.createTime | date:'dd/MM/yyyy HH:mm' }}</td>
                                             <td class="text-end">
                                                 <button class="btn btn-sm btn-outline-primary" (click)="baixarAnexo(anexo.id, anexo.originalName)">
                                                     <i class="bi bi-download"></i>Baixar

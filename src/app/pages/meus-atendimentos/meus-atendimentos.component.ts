@@ -21,9 +21,11 @@ export class MeusAtendimentosComponent {
   currentPage = signal(0);
   pageSize = signal(10);
   isLoading = signal(true);
+  nomeCidadao = signal<string>('');
 
   ngOnInit(){
     this.carregarAtendimentos();
+    this.carregarNomeCidadao();
   }
 
   carregarAtendimentos(){
@@ -93,5 +95,10 @@ export class MeusAtendimentosComponent {
     this.pageSize.set(novoTamanho);
     this.currentPage.set(0);
     this.carregarAtendimentos();
+  }
+
+  carregarNomeCidadao() {
+    const nomeSalvo = localStorage.getItem('usuario_nome') || 'Cidadão';
+    this.nomeCidadao.set(nomeSalvo);
   }
 }
