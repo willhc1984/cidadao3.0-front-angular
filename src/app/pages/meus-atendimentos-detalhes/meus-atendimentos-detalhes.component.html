@@ -26,7 +26,7 @@
         }@else{
             <!-- Informçaões gerais do atendimento -->
             <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-light">
+                <div class="card-header bg-body-light">
                     <h5 class="card-little mb-0">Informações gerais</h5>
                 </div>
                 <div class="card-body">
@@ -57,7 +57,7 @@
                         </div>
                         <div class="col-md-12">
                             <strong>Texto completo da solicitação:</strong>
-                            <div class="p-3 bg-light rounded border mt-1">
+                            <div class="p-3 bg-body-light rounded border mt-1">
                                 {{ atendimento()?.texto }}
                             </div>
                         </div>
@@ -67,7 +67,7 @@
 
             <!-- Seção e anexos-->
             <div class="card shadow-sm">
-                <div class="card-header bg-light d-flex justify-content-between aligh-items-center">
+                <div class="card-header bg-body-light d-flex justify-content-between aligh-items-center">
                     <h5 class="card-title mb-0">Arquivos anexados:</h5>
                     <span class="badge bg-secondary">{{ anexos().length }} arquivo(s)</span>
                 </div>

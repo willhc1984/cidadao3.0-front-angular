@@ -37,11 +37,14 @@ export class AuthenticationService {
           (c: any) => c.usuarioLogin === loginUsuario,
         );
 
-        console.log(cidadaoVinculado);
-
         if(cidadaoVinculado){
           localStorage.setItem('usuario_login', loginUsuario);
           localStorage.setItem('usuario_nome', cidadaoVinculado.pronomeDeTratamento + ' ' + cidadaoVinculado.nome);
+
+          if(cidadaoVinculado.fotoFile && cidadaoVinculado.fotoFile.base64Content){
+            localStorage.setItem('foto_cidadao', cidadaoVinculado.fotoFile.base64Content);
+          }
+          
           return true;
         }else{
           this.logout(); //Remove token se não for cidadão válido
@@ -55,6 +58,7 @@ export class AuthenticationService {
     this.token = null;
     localStorage.removeItem('jwt_token');
     localStorage.removeItem('usuario_login');
+    localStorage.removeItem('usuario_nome');
   }
 
 }

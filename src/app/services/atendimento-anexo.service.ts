@@ -20,7 +20,7 @@ export class AtendimentoAnexoService {
 
   // Consome o endpoint de download: @GetMapping("/download/{id}")
   downloadAnexo(anexoId: number, nomeArquivo: string): void{
-    this.http.get(`${this.API_URL}/download/${anexoId}`, { responseType: 'blob'}).subscribe({
+    this.http.get(`${this.API_URL}/download/${anexoId}`, { responseType: 'blob' }).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
