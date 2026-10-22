@@ -17,6 +17,25 @@
 
 <div class="app-content">
     <div class="container-fluid">
+
+        @if(errorMessage()){
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+                    <div> 
+                        <h5 class="alert-heading mb-1">Acesso negado</h5>
+                        <p class="mb-0">{{ errorMessage() }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <a routerLink="/meus-atendimentos" class="btn btn-sm btn-outiline-danger">
+                    <i class="bi bi-arrow-left me-1">Voltar para meus atendimentos</i>
+                </a>
+            </div>
+        }@else{
+            <!-- Spinner de carregamento -->
         @if(isLoading()){
             <div class="text-center py-5">
                 <div class="spinner-border text-primary" role="status">
@@ -57,7 +76,7 @@
                         </div>
                         <div class="col-md-12">
                             <strong>Texto completo da solicitação:</strong>
-                            <div class="p-3 bg-body-light rounded border mt-1">
+                            <div class="p-3 bg-body-light rounded border mt-1" [innerHTML]="atendimento()?.texto">
                                 {{ atendimento()?.texto }}
                             </div>
                         </div>
@@ -111,6 +130,6 @@
                 </div>
             </div>
         }
+    }        
     </div>
-
 </div>

@@ -59,6 +59,7 @@ export class AuthenticationService {
     localStorage.removeItem('jwt_token');
     localStorage.removeItem('usuario_login');
     localStorage.removeItem('usuario_nome');
+    localStorage.removeItem('foto_cidadao');
   }
 
 }

@@ -21,6 +21,7 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
   atendimento = signal<any>(null);
   anexos = signal<any[]>([]);
   isLoading = signal(true);
+  errorMessage = signal<any>(null);
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -40,6 +41,10 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
       error: (err) => {
         console.log('Erro ao carregar detalhes do atendimento: ', err);
         this.isLoading.set(false);
+        // Captura mensagem que veio da API
+        const msg = err.error?.message || 'Acesso negado ou erro ao carregar o atendimento.';
+        // Atribui ao signal para HTML exibir alert do Bootstrap
+        this.errorMessage.set(msg); 
       }
     });
   }
