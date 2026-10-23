@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { AtendimentosService } from '../../services/atendimentos.service';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-meus-atendimentos',
@@ -13,6 +13,7 @@ import { RouterLink } from '@angular/router';
 
 export class MeusAtendimentosComponent {
   private atendimentoService = inject(AtendimentosService);
+  private route = inject(ActivatedRoute)
 
   // Signals para armazenar o estado da tela
   atendimentos = signal<any[]>([]);
@@ -22,8 +23,15 @@ export class MeusAtendimentosComponent {
   pageSize = signal(10);
   isLoading = signal(true);
   nomeCidadao = signal<string>('');
+  mensagemAviso: string | null = null;
 
   ngOnInit(){
+    // Lê o parametro 'erro' passado na URL durante o redirecionamento
+    this.route.queryParams.subscribe(params => {
+      if(params['erro']){
+        this.mensagemAviso = params['erro'];
+      }
+    })
     this.carregarAtendimentos();
     this.carregarNomeCidadao();
   }

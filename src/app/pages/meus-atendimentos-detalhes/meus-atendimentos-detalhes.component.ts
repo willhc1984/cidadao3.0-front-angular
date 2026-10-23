@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AtendimentosService } from '../../services/atendimentos.service';
 import { AtendimentoAnexoService } from '../../services/atendimento-anexo.service';
 
@@ -14,6 +14,7 @@ import { AtendimentoAnexoService } from '../../services/atendimento-anexo.servic
 export class MeusAtendimentosDetalhesComponent implements OnInit{
 
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private atendimentoService = inject(AtendimentosService);
   private atendimentoAnexoService = inject(AtendimentoAnexoService);
 
@@ -21,7 +22,6 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
   atendimento = signal<any>(null);
   anexos = signal<any[]>([]);
   isLoading = signal(true);
-  errorMessage = signal<any>(null);
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -39,12 +39,14 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
         this.isLoading.set(false); 
       },
       error: (err) => {
-        console.log('Erro ao carregar detalhes do atendimento: ', err);
+        //console.log('Erro ao carregar detalhes do atendimento: ', err);
         this.isLoading.set(false);
         // Captura mensagem que veio da API
-        const msg = err.error?.message || 'Acesso negado ou erro ao carregar o atendimento.';
+        const msg = err.error?.message || 'Erro ao carregar o atendimento.';
         // Atribui ao signal para HTML exibir alert do Bootstrap
-        this.errorMessage.set(msg); 
+        this.router.navigate(['/meus-atendimentos'], {
+          queryParams: { erro: msg }
+        })
       }
     });
   }
@@ -55,7 +57,7 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
         this.anexos.set(res.anexos || []);
       },
       error: (err) => {
-        console.error('Erro ao carregar anexos: ', err)
+        //console.error('Erro ao carregar anexos: ', err)
       }
     });
   }

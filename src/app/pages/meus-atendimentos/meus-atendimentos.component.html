@@ -15,6 +15,13 @@
     </div>
   </div>
 
+  @if(mensagemAviso){
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>{{ mensagemAviso }}
+      <button type="button" class="btn-close" (click)="mensagemAviso = null"></button>
+    </div>
+  }
+
   <!-- Conteúdo Principal -->
   <div class="app-content">
     <div class="container-fluid">
