@@ -2,87 +2,94 @@
 <div class="app-content-header">
     <div class="container-fluid">
         <div class="row">
-        <div class="col-sm-6">
-            <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><a href="/meus-atendimentos">Meus Atendimentos</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Atendimento # {{ atendimento()?.id }}</li>
-            </ol>
-            </nav>
-        </div>
+            <div class="col-sm-6">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a routerLink="/meus-atendimentos">Meus Atendimentos</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Atendimento # {{ atendimento()?.id }}</li>
+                    </ol>
+                </nav>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="app-content"></div>
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab">Geral</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab">Anexos</button>
-        </li>
-    </ul>
+<!-- INÍCIO DA ÁREA DE CONTEÚDO (Envolve as abas e o conteúdo) -->
+<div class="app-content">
+    <div class="container-fluid">
 
-    <div class="tab-content pt-3" id="myTabContent">
-        <div class="tab-pane fade show active" id="home" role="tabpanel">
-                <!-- Spinner de carregamento -->
+        <!-- Navegação por Abas -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="geral-tab" data-bs-toggle="tab" data-bs-target="#geral" type="button" role="tab">Geral</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="anexos-tab" data-bs-toggle="tab" data-bs-target="#anexos" type="button" role="tab">Anexos</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="anotacoes-tab" data-bs-toggle="tab" data-bs-target="#anotacoes" type="button" role="tab">Anotações</button>
+            </li>
+        </ul>
+
+        <!-- Conteúdo das Abas -->
+        <div class="tab-content pt-3" id="myTabContent">
+            
+            <!-- 1. ABA GERAL -->
+            <div class="tab-pane fade show active" id="geral" role="tabpanel">
                 @if(isLoading()){
                     <div class="text-center py-5">
                         <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Carregando...</span>
+                            <span class="visually-hidden">Carregando...</span>
                         </div>
                     </div>
                 }@else{
-                <!-- Informçaões gerais do atendimento -->
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-body-light">
-                        <h5 class="card-little mb-0">Informações gerais</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-4">
-                                <strong>Protocolo:</strong>
-                                <p class="text-muted mb-0">{{ atendimento()?.protocolo || 'Não gerado' }}</p>
-                            </div>
-                            <div class="col-md-4">
-                                <strong>Data da abertura</strong>
-                                <p class="text-muted mb-0">{{ atendimento()?.data | date:'dd/MM/yyyy HH:mm' }}</p>
-                            </div>
-                            <div class="col-md-4">
-                                <strong>Estado atual</strong>
-                                <p class="mb-0">
-                                    <span class="badge" [ngClass]="obterCorBadgeEstado(atendimento()?.estadoDescricao || atendimento()?.estado)">
-                                        {{ formatarDescricaoEstado(atendimento()?.estadoDescricao || atendimento()?.estado) }}
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="col-md-4">
-                                <strong>Descrição/Assunto:</strong>
-                                <p class="text-muted mb-0">{{ atendimento()?.descricao }}</p>
-                            </div>
-                            <div class="col-md-4">
-                                <strong>Usuário atendendo</strong>
-                                <p class="text-muted mb-0">{{ atendimento()?.usuarioAtendendo || 'Não informado'}}</p>
-                            </div>
-                            <div class="col-md-12">
-                                <strong>Texto completo da solicitação:</strong>
-                                <div class="p-3 bg-body-light rounded border mt-1" [innerHTML]="atendimento()?.texto">
-                                    {{ atendimento()?.texto }}
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header bg-body-light">
+                            <h5 class="card-title mb-0">Informações gerais</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <strong>Protocolo:</strong>
+                                    <p class="text-muted mb-0">{{ atendimento()?.protocolo || 'Não gerado' }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Data da abertura</strong>
+                                    <p class="text-muted mb-0">{{ atendimento()?.data | date:'dd/MM/yyyy HH:mm' }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Estado atual</strong>
+                                    <p class="mb-0">
+                                        <span class="badge" [ngClass]="obterCorBadgeEstado(atendimento()?.estadoDescricao || atendimento()?.estado)">
+                                            {{ formatarDescricaoEstado(atendimento()?.estadoDescricao || atendimento()?.estado) }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Descrição/Assunto:</strong>
+                                    <p class="text-muted mb-0">{{ atendimento()?.descricao }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Usuário atendendo</strong>
+                                    <p class="text-muted mb-0">{{ atendimento()?.usuarioAtendendo || 'Não informado'}}</p>
+                                </div>
+                                <div class="col-md-12">
+                                    <strong>Texto completo da solicitação:</strong>
+                                    <div class="p-3 bg-body-light rounded border mt-1" [innerHTML]="atendimento()?.texto">
+                                        {{ atendimento()?.texto }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                }       
+                }      
             </div>
-        </div>
-        <div class="tab-pane fade" id="profile" role="tabpanel">
-            <!-- Seção e anexos-->
-            <div class="container-fluid">
+            
+            <!-- 2. ABA ANEXOS -->
+            <div class="tab-pane fade" id="anexos" role="tabpanel">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-body-light d-flex justify-content-between aligh-items-center">
+                    <div class="card-header bg-body-light d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Arquivos anexados:</h5>
                         <span class="badge bg-secondary">{{ anexos().length }} arquivo(s)</span>
                     </div>
@@ -93,7 +100,7 @@
                             </div>
                         }@else{
                             <div class="table-responsive">
-                                <table class="table table-stripped align-middle mb-0">
+                                <table class="table table-striped align-middle mb-0">
                                     <thead>
                                         <tr>
                                             <th>Nome do arquivo</th>
@@ -114,7 +121,7 @@
                                                 <td>{{ anexo.createTime | date:'dd/MM/yyyy HH:mm' }}</td>
                                                 <td class="text-end">
                                                     <button class="btn btn-sm btn-outline-primary" (click)="baixarAnexo(anexo.id, anexo.originalName)">
-                                                        <i class="bi bi-download"></i>Baixar
+                                                        <i class="bi bi-download me-1"></i>Baixar
                                                     </button>
                                                 </td>
                                             </tr>
@@ -123,8 +130,44 @@
                                 </table>
                             </div>
                         }
+                    </div>
+                </div>
+            </div>        
+
+            <!-- 3. ABA ANOTAÇÕES -->
+            <div class="tab-pane fade" id="anotacoes" role="tabpanel">
+                <div class="container-fluid px-0">
+                    
+                    <!-- Verifica se a lista está vazia -->
+                    @if(anotacoes().length === 0){
+                        <div class="card shadow-sm">
+                            <div class="card-body p-4 text-center text-muted">
+                                Nenhuma anotação encontrada para este atendimento.
+                            </div>
+                        </div>
+                    } @else {
+                        <!-- Percorre a lista de anotações -->
+                        @for (anotacao of anotacoes(); track anotacao.id) {
+                            <div class="card mb-3 shadow-sm">
+                                <div class="card-header bg-body-light d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold text-primary">
+                                        <i class="bi bi-journal-text me-2"></i>{{ anotacao.descricaoBreve || 'Anotação' }}
+                                    </span>
+                                    <span class="text-muted small">
+                                        <i class="bi bi-clock me-1"></i>{{ anotacao.dataHorario | date:'dd/MM/yyyy HH:mm' }}
+                                    </span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="p-3 bg-body-light rounded border" [innerHTML]="anotacao.descricao">
+                                        {{ anotacao.descricao }}
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
-        </div>
+        </div> <!-- Fim de tab-content -->
+
     </div>
-  
+</div> <!-- Fim de app-content -->

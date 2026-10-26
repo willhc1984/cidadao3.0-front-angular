@@ -3,6 +3,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AtendimentosService } from '../../services/atendimentos.service';
 import { AtendimentoAnexoService } from '../../services/atendimento-anexo.service';
+import { AtendimentoAnotacoesService } from '../../services/atendimento-anotacoes.service';
 
 @Component({
   selector: 'app-meus-atendimentos-detalhes',
@@ -17,11 +18,13 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
   private router = inject(Router);
   private atendimentoService = inject(AtendimentosService);
   private atendimentoAnexoService = inject(AtendimentoAnexoService);
+  private anotacoesService = inject(AtendimentoAnotacoesService);
 
   // Signals para o estado da tela
   atendimento = signal<any>(null);
   anexos = signal<any[]>([]);
   isLoading = signal(true);
+  anotacoes = signal<any[]>([]);
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -29,6 +32,7 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
       const id = Number(idParam);
       this.carregarDadosAtendimento(id);
       this.carregarAnexos(id);
+      this.carregarAnotacoesAtendimento(id);
     }
   }
 
@@ -36,7 +40,7 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
     this.atendimentoService.buscarPorId(id).subscribe({
       next: (res) => {
         this.atendimento.set(res);
-        this.isLoading.set(false); 
+        this.isLoading.set(false);
       },
       error: (err) => {
         //console.log('Erro ao carregar detalhes do atendimento: ', err);
@@ -47,6 +51,24 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
         this.router.navigate(['/meus-atendimentos'], {
           queryParams: { erro: msg }
         })
+      }
+    });
+  }
+
+  carregarAnotacoesAtendimento(id: number){
+    this.anotacoesService.buscaAnotacoesIdAtendimento(id).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        console.log(res.anotacoes[1]);
+        const listaAnotacoes = res?.anotacoes || (Array.isArray(res) ? res: []);
+        this.anotacoes.set(listaAnotacoes);
+        this.isLoading.set(false);
+        console.log('Anotações carregadas: ', this.anotacoes());
+      },
+      error: (err) =>{
+        console.log('Erro ao carregar anotações do atendimento ID: ', id);
+        this.anotacoes.set([]);
+        this.isLoading.set(false);
       }
     });
   }
