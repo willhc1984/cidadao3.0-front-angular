@@ -58,15 +58,11 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
   carregarAnotacoesAtendimento(id: number){
     this.anotacoesService.buscaAnotacoesIdAtendimento(id).subscribe({
       next: (res: any) => {
-        console.log(res);
-        console.log(res.anotacoes[1]);
         const listaAnotacoes = res?.anotacoes || (Array.isArray(res) ? res: []);
         this.anotacoes.set(listaAnotacoes);
         this.isLoading.set(false);
-        console.log('Anotações carregadas: ', this.anotacoes());
       },
       error: (err) =>{
-        console.log('Erro ao carregar anotações do atendimento ID: ', id);
         this.anotacoes.set([]);
         this.isLoading.set(false);
       }

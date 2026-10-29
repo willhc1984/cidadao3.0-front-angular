@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 
 export class HeaderComponent implements OnInit{
+  
   private authService = inject(AuthenticationService);
   private router = inject(Router);
 

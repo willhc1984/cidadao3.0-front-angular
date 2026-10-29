@@ -49,7 +49,7 @@ export class LoginComponent {
         }else if(err.status === 0){
           this.errorMessage.set('Não foi possivel conectar ao servidor.');
         }else{ 
-          // Exibe msg de erro ninda da validação do cidadão
+          // Exibe msg de erro vinda da validação do cidadão
           this.errorMessage.set(err.message || 'Ocorreu um erro inesperado.');
         }
       }

@@ -46,6 +46,7 @@ export class AuthenticationService {
           }
           
           return true;
+          
         }else{
           this.logout(); //Remove token se não for cidadão válido
           throw new Error('Acesso negado: usuário não é um cidadão válido no sistema.');

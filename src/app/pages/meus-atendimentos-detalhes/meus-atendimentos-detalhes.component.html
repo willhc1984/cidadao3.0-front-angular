@@ -18,7 +18,6 @@
 <!-- INÍCIO DA ÁREA DE CONTEÚDO (Envolve as abas e o conteúdo) -->
 <div class="app-content">
     <div class="container-fluid">
-
         <!-- Navegação por Abas -->
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -33,8 +32,7 @@
         </ul>
 
         <!-- Conteúdo das Abas -->
-        <div class="tab-content pt-3" id="myTabContent">
-            
+        <div class="tab-content pt-3" id="myTabContent">            
             <!-- 1. ABA GERAL -->
             <div class="tab-pane fade show active" id="geral" role="tabpanel">
                 @if(isLoading()){
@@ -136,8 +134,7 @@
 
             <!-- 3. ABA ANOTAÇÕES -->
             <div class="tab-pane fade" id="anotacoes" role="tabpanel">
-                <div class="container-fluid px-0">
-                    
+                <div class="container-fluid px-0">                    
                     <!-- Verifica se a lista está vazia -->
                     @if(anotacoes().length === 0){
                         <div class="card shadow-sm">
@@ -168,6 +165,5 @@
                 </div>
             </div>
         </div> <!-- Fim de tab-content -->
-
     </div>
 </div> <!-- Fim de app-content -->
