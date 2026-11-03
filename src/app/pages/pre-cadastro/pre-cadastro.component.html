@@ -14,7 +14,7 @@
 <div class="app-content">
     <div class="container-fluid">
         <div class="row justify-content-center">
-            <div class="col-12 col-lg-9 col-xl-6">
+            <div class="col-12 col-lg-8 col-xl-6 col-md-8">
                 <!-- Card do Formulário -->
                 <div class="card card-primary card-outline shadow-sm mb-4">
                     <div class="card-header bg-body-light">
@@ -37,7 +37,7 @@
 
                                 <!-- E-mail -->
                                 <div class="col-md-6">
-                                    <label for="email" class="form-label">E-mail</label>
+                                    <label for="email" class="form-label">E-mail<span class="text-danger">*</span></label>
                                     <input type="email" id="email" class="form-control" formControlName="email"
                                         [ngClass]="{'is-invalid': form.get('email')?.invalid && form.get('email')?.touched}">
                                     @if (form.get('email')?.invalid && form.get('email')?.touched) {
@@ -47,66 +47,92 @@
 
                                 <!-- Data de Nascimento -->
                                 <div class="col-md-4">
-                                    <label for="dataDeNascimento" class="form-label">Data de Nascimento</label>
-                                    <input type="date" id="dataDeNascimento" class="form-control" formControlName="dataDeNascimento">
+                                    <label for="dataDeNascimento" class="form-label">Data de Nascimento<span class="text-danger">*</span></label>
+                                    <input type="date" id="dataDeNascimento" class="form-control" formControlName="dataDeNascimento"
+                                        [ngClass]="{'is-invalid' : form.get('dataDeNascimento')?.invalid && form.get('dataDeNascimento')?.touched}">
+                                    @if(form.get('dataDeNascimento')?.invalid && form.get('dataDeNascimento')?.touched){
+                                        <div class="invalid-feedback">Data de nascimento obrigatória.</div>
+                                    }
                                 </div>
 
                                 <!-- Sexo -->
                                 <div class="col-md-4">
-                                    <label for="sexo" class="form-label">Sexo</label>
-                                    <select id="sexo" class="form-select" formControlName="sexo">
+                                    <label for="sexo" class="form-label">Sexo<span class="text-danger">*</span></label>
+                                    <select id="sexo" class="form-select" formControlName="sexo"
+                                        [ngClass]="{'is-invalid': form.get('sexo')?.invalid && form.get('sexo')?.touched}">
                                         <option value="">Selecione...</option>
                                         <option value="M">Masculino</option>
                                         <option value="F">Feminino</option>
                                     </select>
+                                    @if(form.get('sexo')?.invalid && form.get('sexo')?.touched){
+                                        <div class="invalid-feedback">Selecione o sexo.</div>
+                                    }
                                 </div>
 
                                 <!-- Celular -->
                                 <div class="col-md-4">
-                                    <label for="celular" class="form-label">Celular</label>
-                                    <input type="text" id="celular" class="form-control" formControlName="celular" placeholder="(00) 00000-0000">
+                                    <label for="celular" class="form-label">Celular<span class="text-danger">*</span></label>
+                                    <input type="text" id="celular" class="form-control" formControlName="celular" placeholder="(00) 00000-0000"
+                                        [ngClass]="{'is-invalid' : form.get('celular')?.invalid && form.get('celular')?.touched}">
+                                    @if(form.get('celular')?.invalid && form.get('celular')?.touched){
+                                        <div class="invalid-feedback">Informe um celular para contato</div>
+                                    }
                                 </div>
 
                                 <!-- CPF -->
                                 <div class="col-md-4">
-                                    <label for="cpf" class="form-label">CPF</label>
-                                    <input type="text" id="cpf" class="form-control" formControlName="cpf" placeholder="000.000.000-00">
+                                    <label for="cpf" class="form-label">CPF<span class="text-danger">*</span></label>
+                                    <input type="text" id="cpf" class="form-control" formControlName="cpf" placeholder="000.000.000-00"
+                                        [ngClass]="{'is-invalid' : form.get('cpf')?.invalid && form.get('cpf')?.touched}">
+                                    @if(form.get('cpf')?.invalid && form.get('cpf')?.touched){
+                                        <div class="invalid-feedback">Informe seu CPF corretamente</div>
+                                    }
                                 </div>
 
                                 <!-- RG -->
                                 <div class="col-md-4">
-                                    <label for="rg" class="form-label">RG</label>
-                                    <input type="text" id="rg" class="form-control" formControlName="rg">
+                                    <label for="rg" class="form-label">RG<span class="text-danger">*</span></label>
+                                    <input type="text" id="rg" class="form-control" formControlName="rg"
+                                        [ngClass]="{'is-invalid' : form.get('rg')?.invalid && form.get('rg')?.touched}">
+                                    @if(form.get('rg')?.invalid && form.get('rg')?.touched){
+                                        <div class="invalid-feedback">Informe seu RG corretamente.</div>
+                                    }
                                 </div>
 
                                 <!-- Número Eleitoral -->
                                 <div class="col-md-4">
-                                    <label for="numeroEleitoral" class="form-label">Número Eleitoral</label>
+                                    <label for="numeroEleitoral" class="form-label">Número Eleitoral<span class="text-danger">*</span></label>
                                     <input type="text" id="numeroEleitoral" class="form-control" formControlName="numeroEleitoral">
                                 </div>
 
                                 <!-- CEP -->
                                 <div class="col-md-3">
-                                    <label for="cep" class="form-label">CEP</label>
+                                    <label for="cep" class="form-label">CEP<span class="text-danger">*</span></label>
                                     <input type="text" id="cep" class="form-control" formControlName="cep" placeholder="00000-000">
                                 </div>
 
                                 <!-- Logradouro -->
-                                <div class="col-md-7">
-                                    <label for="logradouro" class="form-label">Logradouro (Rua, Av...)</label>
+                                <div class="col-md-9">
+                                    <label for="logradouro" class="form-label">Logradouro (Rua, Avenida...)<span class="text-danger">*</span></label>
                                     <input type="text" id="logradouro" class="form-control" formControlName="logradouro">
                                 </div>
 
                                 <!-- Bairro -->
-                                <div class="col-md-2">
-                                    <label for="bairro" class="form-label">Bairro</label>
+                                <div class="col-md-5">
+                                    <label for="bairro" class="form-label">Bairro<span class="text-danger">*</span></label>
                                     <input type="text" id="bairro" class="form-control" formControlName="bairro">
                                 </div>
 
                                 <!-- Cidade -->
-                                <div class="col-md-4">
-                                    <label for="cidade" class="form-label">Cidade</label>
+                                <div class="col-md-5">
+                                    <label for="cidade" class="form-label">Cidade<span class="text-danger">*</span></label>
                                     <input type="text" id="cidade" class="form-control" formControlName="cidade">
+                                </div>
+
+                                <!-- Estado -->
+                                <div class="col-md-2">
+                                    <label for="estado" class="form-label">Estado<span class="text-danger">*</span></label>
+                                    <input type="text" id="estado" class="form-control" formControlName="estado">
                                 </div>
 
                             </div>
@@ -130,20 +156,21 @@
                 </div>
             </div>
         </div>
+        
         <!-- Alertas de Feedback -->
-        @if (mensagemErro()) {
+        <!-- @if (mensagemErro()) {
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ mensagemErro() }}
                 <button type="button" class="btn-close" (click)="mensagemErro.set(null)" aria-label="Close"></button>
             </div>
-        }
+        } -->
 
-        @if (mensagemSucesso()) {
+        <!-- @if (mensagemSucesso()) {
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="bi bi-check-circle-fill me-2"></i>{{ mensagemSucesso() }}
                 <button type="button" class="btn-close" (click)="mensagemSucesso.set(null)" aria-label="Close"></button>
             </div>
-        }
+        } -->
 
     </div>
 </div>
