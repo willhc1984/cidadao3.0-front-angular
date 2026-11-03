@@ -6,7 +6,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-meus-atendimentos',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './meus-atendimentos.component.html',
   styleUrl: './meus-atendimentos.component.scss'
 })

@@ -1,11 +1,12 @@
 <!-- Cabeçalho da Página -->
 <div class="app-content-header">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <h3 class="mb-0">Novo Pré-Cadastro de Cidadão</h3>
-            </div>
-        </div>
+    <div class="container-fluid d-flex justify-content-center align-items-center pt-5">
+        <img 
+            src="images/logo.png" 
+            alt="Logo Portal Cidadão" 
+            class="img-fluid mb-4" 
+            style="max-width: 250px;"
+        >
     </div>
 </div>
 
@@ -17,7 +18,7 @@
                 <!-- Card do Formulário -->
                 <div class="card card-primary card-outline shadow-sm mb-4">
                     <div class="card-header bg-body-light">
-                        <h5 class="card-title mb-0">Preencha os dados do cidadão</h5>
+                        <h5 class="card-title mb-0">Preencha seus dados corretamente</h5>
                     </div>
                     
                     <form [formGroup]="form" (ngSubmit)="salvar()">
