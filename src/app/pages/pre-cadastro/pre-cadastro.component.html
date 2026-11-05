@@ -81,7 +81,7 @@
 
                                 <!-- CPF -->
                                 <div class="col-md-4">
-                                    <label for="cpf" class="form-label">CPF<span class="text-danger">*</span></label>
+                                    <label for="cpf" class="form-label">CPF</label>
                                     <input type="text" id="cpf" class="form-control" formControlName="cpf" placeholder="000.000.000-00"
                                         [ngClass]="{'is-invalid' : form.get('cpf')?.invalid && form.get('cpf')?.touched}">
                                     @if(form.get('cpf')?.invalid && form.get('cpf')?.touched){
@@ -91,7 +91,7 @@
 
                                 <!-- RG -->
                                 <div class="col-md-4">
-                                    <label for="rg" class="form-label">RG<span class="text-danger">*</span></label>
+                                    <label for="rg" class="form-label">RG</label>
                                     <input type="text" id="rg" class="form-control" formControlName="rg"
                                         [ngClass]="{'is-invalid' : form.get('rg')?.invalid && form.get('rg')?.touched}">
                                     @if(form.get('rg')?.invalid && form.get('rg')?.touched){
@@ -101,40 +101,62 @@
 
                                 <!-- Número Eleitoral -->
                                 <div class="col-md-4">
-                                    <label for="numeroEleitoral" class="form-label">Número Eleitoral<span class="text-danger">*</span></label>
-                                    <input type="text" id="numeroEleitoral" class="form-control" formControlName="numeroEleitoral">
+                                    <label for="numeroEleitoral" class="form-label">Número Eleitoral</label>
+                                    <input type="text" id="numeroEleitoral" class="form-control" formControlName="numeroEleitoral"
+                                        [ngClass]="{'is-invalid' : form.get('numeroEleitoral')?.invalid && form.get('numeroEleitoral')?.touched}">
+                                    @if(form.get('numeroEleitoral')?.invalid && form.get('numeroeleitoral')?.touched){
+                                        <div class="invalid-feedback">Informe seu numero eleitoral.</div>
+                                    }
                                 </div>
 
                                 <!-- CEP -->
                                 <div class="col-md-3">
-                                    <label for="cep" class="form-label">CEP<span class="text-danger">*</span></label>
-                                    <input type="text" id="cep" class="form-control" formControlName="cep" placeholder="00000-000">
+                                    <label for="cep" class="form-label">CEP</label>
+                                    <input type="text" id="cep" class="form-control" formControlName="cep" placeholder="00000-000"
+                                        [ngClass]="{'is-invalid' : (form.get('cep')?.invalid && form.get('cep')?.touched) || cepNaoEncontrado()}">
+
+                                    @if((form.get('cep')?.invalid && form.get('cep')?.touched) || cepNaoEncontrado()){
+                                        <div class="invalid-feedback">  
+                                            @if(form.get('cep')?.hasError('required')){
+                                                <span>O CEP é obrigatório.</span>
+                                            }@else if (cepNaoEncontrado()){
+                                                <span>CEP não encontrado.</span>
+                                            }@else{
+                                                <span>Digite um CEP válido.</span>
+                                            }
+                                        </div>
+                                    }
                                 </div>
 
                                 <!-- Logradouro -->
-                                <div class="col-md-9">
-                                    <label for="logradouro" class="form-label">Logradouro (Rua, Avenida...)<span class="text-danger">*</span></label>
+                                <div class="col-md-7">
+                                    <label for="logradouro" class="form-label">Logradouro (Rua, Avenida...)</label>
                                     <input type="text" id="logradouro" class="form-control" formControlName="logradouro">
+                                </div>
+
+                                 <!-- Numero -->
+                                <div class="col-md-2">
+                                    <label for="numero" class="form-label">Nº</label>
+                                    <input type="text" id="numero" class="form-control" formControlName="numero" #inputNumero>
                                 </div>
 
                                 <!-- Bairro -->
                                 <div class="col-md-5">
-                                    <label for="bairro" class="form-label">Bairro<span class="text-danger">*</span></label>
+                                    <label for="bairro" class="form-label">Bairro</label>
                                     <input type="text" id="bairro" class="form-control" formControlName="bairro">
                                 </div>
 
                                 <!-- Cidade -->
                                 <div class="col-md-5">
-                                    <label for="cidade" class="form-label">Cidade<span class="text-danger">*</span></label>
+                                    <label for="cidade" class="form-label">Cidade</label>
                                     <input type="text" id="cidade" class="form-control" formControlName="cidade">
                                 </div>
 
                                 <!-- Estado -->
                                 <div class="col-md-2">
-                                    <label for="estado" class="form-label">Estado<span class="text-danger">*</span></label>
+                                    <label for="estado" class="form-label">Estado</label>
                                     <input type="text" id="estado" class="form-control" formControlName="estado">
                                 </div>
-
                             </div>
                         </div>
 
@@ -152,6 +174,7 @@
                                 }
                             </button>
                         </div>
+                        <p class="p-2"><span class="text-danger">*   </span>Campos obrigatórios</p>
                     </form>
                 </div>
             </div>
