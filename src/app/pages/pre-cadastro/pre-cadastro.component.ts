@@ -40,19 +40,20 @@ export class PreCadastroComponent implements OnInit{
     dataDeNascimento: ['', [Validators.required]],
     email: ['', [Validators.email, Validators.required]],
     sexo: ['', [Validators.required]],
-    rg: [''],
-    cpf: [''],
+    rg: ['', [Validators.pattern(/^$|^\d{7,10}$/)]],
+    cpf: ['', [Validators.pattern(/^\d{11}$/)]],
     cep: [''],
     logradouro: [''],
     bairro: [''],
     cidade: [''],
     estado: [''],
-    celular: ['', [Validators.required]],
+    celular: ['', [Validators.required, Validators.pattern(/^\d{10,11}$/)]],
     numero: [''],
     numeroEleitoral: ['']
   });
 
-  salvar() : void{
+  // Validar somente no frontend e devolver mensagem genérica para limpar o código
+  salvar(): void{
     if(this.form.invalid){
       this.form.markAllAsTouched();
       return;
@@ -60,43 +61,25 @@ export class PreCadastroComponent implements OnInit{
 
     this.isLoading.set(true);
     
-    const dados = this.prepararDadosEnvio();
-    console.log("Dados sanitizados: ", dados);
-
-    this.service.salvar(dados).pipe(
+    this.service.salvar(this.form.value).pipe(
       finalize(() => this.isLoading.set(false))
     ).subscribe({
       next: () => {
+        console.log("Dados form: ", this.form.value);
         this.alert.successModal("Pré-cadastro realizado!", "Aguarde a liberação do gabinete para acessar o sistema.");
         this.form.reset();
       },
       error: (erro) => {
+        console.log("Dados form: ", this.form.value);
         const mensagem = this.extrairMensagemErro(erro);
         this.alert.errorModal('Atenção', mensagem);
       }
     });
   }
 
-  // Prepara os dados do formulario removendo mascaras e caracteres especiais
-  private prepararDadosEnvio(){
-    const valores = this.form.value;
-    return{
-      ...valores,
-      cep: this.form.value.cep ? this.form.value.cep.replace(/\D/g, '') : '',
-      cpf: this.form.value.cpf ? this.form.value.cpf.replace(/\D/g, '') : '',
-      celular: this.form.value.celular ? this.form.value.celular.replace(/\D/g, '') : '',
-      rg: this.form.value.rg ? this.form.value.rg.replace(/\D/g, '') : ''
-    };
-  }
-
-  // Extrai a mensagem correta independente do formato retornado pela API
+  // Extrai a mensagens de negócio ou genéricas
   private extrairMensagemErro(erro: any): string{
-    // Se for o Map de validação de campos do @Valid
-    if(erro.status === 400 && erro.error && typeof erro.error === 'object' && !erro.error.message && !erro.error.detail){
-       return Object.values(erro.error).join('\n');
-    }
-    // Se for mensgem customizada da API
-    return erro.error?.message || erro.error?.detail || (typeof erro.error === 'string' ? erro.error : 'Ocorreu um erro ao salvar pré-cadastro.');
+    return erro.error?.message || erro.error?.detail || 'Ocorreu um erro ao salvar pré-cadastro.';
   }
 
   // Configura escuta reativa do campo CEP para preenchimento automatico ViaCEP
