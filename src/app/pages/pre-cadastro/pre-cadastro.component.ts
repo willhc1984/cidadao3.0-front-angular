@@ -6,10 +6,11 @@ import { SweetAlertService } from '../../services/sweet-alert.service';
 import { debounce, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PreCadastroService } from '../../services/pre-cadastro.service';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 
 @Component({
   selector: 'app-pre-cadastro',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgxMaskDirective, NgxMaskPipe],
   templateUrl: './pre-cadastro.component.html',
   styleUrl: './pre-cadastro.component.scss'
 })
