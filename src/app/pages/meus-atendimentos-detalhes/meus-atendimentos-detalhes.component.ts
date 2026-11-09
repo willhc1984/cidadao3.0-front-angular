@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AtendimentosService } from '../../services/atendimentos.service';
 import { AtendimentoAnexoService } from '../../services/atendimento-anexo.service';
 import { AtendimentoAnotacoesService } from '../../services/atendimento-anotacoes.service';
+import { SweetAlertService } from '../../services/sweet-alert.service';
 
 @Component({
   selector: 'app-meus-atendimentos-detalhes',
@@ -19,6 +20,7 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
   private atendimentoService = inject(AtendimentosService);
   private atendimentoAnexoService = inject(AtendimentoAnexoService);
   private anotacoesService = inject(AtendimentoAnotacoesService);
+  private alert = inject(SweetAlertService);
 
   // Signals para o estado da tela
   atendimento = signal<any>(null);
@@ -67,6 +69,26 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
         this.isLoading.set(false);
       }
     });
+  }
+
+  excluirAnexoAtendimento(idAnexoAtendimento: number, nomeArquivo: string): void{
+    this.alert.confirm('Excluir anexo', `Deseja realmente excluir o anexo "${nomeArquivo}"? Está ação não poderá ser desfeita.`)
+      .then((result) => {
+        if(result){
+          this.atendimentoAnexoService.excluirAnexoAtendimento(idAnexoAtendimento).subscribe({
+            next: () => {
+              this.alert.successModal('Excluido','Anexo removido com sucesso.');  
+              this.anexos.update(listaAtual => 
+                listaAtual.filter((anexo: any) => Number(anexo.id) !== Number(idAnexoAtendimento))
+              )
+            },
+            error: (erro) => {
+              const mensagem = erro.error?.message || erro.error?.detail || 'Erro ao excluir anexo.';
+              this.alert.errorModal('Atenção', mensagem);            
+            }
+          });
+       }
+    })
   }
 
   carregarAnexos(id: number){

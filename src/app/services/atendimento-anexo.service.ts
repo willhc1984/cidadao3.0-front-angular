@@ -18,6 +18,11 @@ export class AtendimentoAnexoService {
     return this.http.get<any>(`${this.API_URL}/byatendimento/${atendimentoId}`);
   }
 
+  // Endpoint de exclusão de anexo do atendimento
+  excluirAnexoAtendimento(idAnexoAtendimento: number): Observable<void>{
+    return this.http.delete<void>(`${this.API_URL}/${idAnexoAtendimento}`);
+  }
+
   // Consome o endpoint de download: @GetMapping("/download/{id}")
   downloadAnexo(anexoId: number, nomeArquivo: string): void{
     this.http.get(`${this.API_URL}/download/${anexoId}`, { responseType: 'blob' }).subscribe({

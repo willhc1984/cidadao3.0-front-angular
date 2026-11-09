@@ -15,6 +15,4 @@ export class PreCadastroService {
   salvar(dados: CidadaoPreCadastro): Observable<any>{
     return this.http.post<any>(this.API_URL, dados);
   }
-
-
 }

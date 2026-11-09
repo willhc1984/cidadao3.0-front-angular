@@ -117,11 +117,14 @@
                                                 <td><span class="badge bg-light text-dark border">{{ anexo.contentType }}</span></td>
                                                 <td>{{ (anexo.size / 1024).toFixed(2) }} KB</td>
                                                 <td>{{ anexo.createTime | date:'dd/MM/yyyy HH:mm' }}</td>
-                                                <td class="text-end">
+                                                <td class="text-end d-flex justify-content-end gap-2">
                                                     <button class="btn btn-sm btn-outline-primary" (click)="baixarAnexo(anexo.id, anexo.originalName)">
-                                                        <i class="bi bi-download me-1"></i>Baixar
+                                                        <i class="bi bi-download me-1"></i>
                                                     </button>
-                                                </td>
+                                                     <button class="btn btn-sm btn-outline-danger" (click)="excluirAnexoAtendimento(anexo.id, anexo.originalName)">
+                                                        <i class="bi bi-trash me-1"></i>
+                                                    </button>
+                                                </td>                                               
                                             </tr>
                                         }
                                     </tbody>
