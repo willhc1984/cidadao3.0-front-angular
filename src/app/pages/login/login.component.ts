@@ -35,9 +35,7 @@ export class LoginComponent {
     };
 
     // Faz autenticação obtendo token, depois valida se é cidadao usando switchMap
-    this.authService.authenticate(credentials).pipe(
-      switchMap(() => this.authService.verificarVinculoCidadao(credentials.login))
-    ).subscribe({
+    this.authService.authenticate(credentials).subscribe({
       next: () => {
         this.isLoading.set(false);
         this.router.navigate(['/home']); // Sucesso total e redirecionamento

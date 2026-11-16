@@ -29,31 +29,31 @@ export class AuthenticationService {
   }
 
   // Verifica se usuário é um cidadão válido no sistema
-  verificarVinculoCidadao(loginUsuario: string): Observable<boolean>{
-    return this.http.get<any>(this.CIDADAO_URL).pipe(
-      map((res) => {
-        const listaCidadaos = Array.isArray(res) ? res : (res?.elements || []);
-        const cidadaoVinculado = listaCidadaos.find(
-          (c: any) => c.usuarioLogin === loginUsuario,
-        );
+  // verificarVinculoCidadao(loginUsuario: string): Observable<boolean>{
+  //   return this.http.get<any>(this.CIDADAO_URL).pipe(
+  //     map((res) => {
+  //       const listaCidadaos = Array.isArray(res) ? res : (res?.elements || []);
+  //       const cidadaoVinculado = listaCidadaos.find(
+  //         (c: any) => c.usuarioLogin === loginUsuario,
+  //       );
 
-        if(cidadaoVinculado){
-          localStorage.setItem('usuario_login', loginUsuario);
-          localStorage.setItem('usuario_nome', cidadaoVinculado.pronomeDeTratamento + ' ' + cidadaoVinculado.nome);
+  //       if(cidadaoVinculado){
+  //         localStorage.setItem('usuario_login', loginUsuario);
+  //         localStorage.setItem('usuario_nome', cidadaoVinculado.pronomeDeTratamento + ' ' + cidadaoVinculado.nome);
 
-          if(cidadaoVinculado.fotoFile && cidadaoVinculado.fotoFile.base64Content){
-            localStorage.setItem('foto_cidadao', cidadaoVinculado.fotoFile.base64Content);
-          }
+  //         if(cidadaoVinculado.fotoFile && cidadaoVinculado.fotoFile.base64Content){
+  //           localStorage.setItem('foto_cidadao', cidadaoVinculado.fotoFile.base64Content);
+  //         }
           
-          return true;
+  //         return true;
           
-        }else{
-          this.logout(); //Remove token se não for cidadão válido
-          throw new Error('Acesso negado: usuário não é um cidadão válido no sistema.');
-        }
-      })
-    );
-  }
+  //       }else{
+  //         this.logout(); //Remove token se não for cidadão válido
+  //         throw new Error('Acesso negado: usuário não é um cidadão válido no sistema.');
+  //       }
+  //     })
+  //   );
+  // }
 
   logout(){
     this.token = null;

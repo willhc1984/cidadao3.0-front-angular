@@ -23,6 +23,13 @@ export class AtendimentoAnexoService {
     return this.http.delete<void>(`${this.API_URL}/${idAnexoAtendimento}`);
   }
 
+  // Endpoint de upload de arquivo
+  uploadAnexo(file: File): Observable<any>{
+    const formData = new FormData();
+    formData.append('anexoFile', file, file.name);
+    return this.http.post<any>(`${this.API_URL}/upload`, formData);
+  }
+
   // Consome o endpoint de download: @GetMapping("/download/{id}")
   downloadAnexo(anexoId: number, nomeArquivo: string): void{
     this.http.get(`${this.API_URL}/download/${anexoId}`, { responseType: 'blob' }).subscribe({

@@ -3,7 +3,6 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AtendimentosService } from '../../services/atendimentos.service';
 import { AtendimentoAnexoService } from '../../services/atendimento-anexo.service';
-import { AtendimentoAnotacoesService } from '../../services/atendimento-anotacoes.service';
 import { SweetAlertService } from '../../services/sweet-alert.service';
 
 @Component({
@@ -19,7 +18,6 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
   private router = inject(Router);
   private atendimentoService = inject(AtendimentosService);
   private atendimentoAnexoService = inject(AtendimentoAnexoService);
-  private anotacoesService = inject(AtendimentoAnotacoesService);
   private alert = inject(SweetAlertService);
 
   // Signals para o estado da tela
@@ -28,13 +26,16 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
   isLoading = signal(true);
   anotacoes = signal<any[]>([]);
 
+  // Variavel para guardar arquivo arquivo selecionado para upload
+  arquivoSelecionado: File | null = null;
+
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
     if(idParam){
       const id = Number(idParam);
       this.carregarDadosAtendimento(id);
-      this.carregarAnexos(id);
-      this.carregarAnotacoesAtendimento(id);
+      //this.carregarAnexos(id);
+      //this.carregarAnotacoesAtendimento(id);
     }
   }
 
@@ -42,6 +43,10 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
     this.atendimentoService.buscarPorId(id).subscribe({
       next: (res) => {
         this.atendimento.set(res);
+        this.anexos.set(res.anexos || []);
+        console.log(res.anexos)
+        this.anotacoes.set(res.anotacoes);
+        console.log(res.anotacoes);
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -53,20 +58,6 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
         this.router.navigate(['/meus-atendimentos'], {
           queryParams: { erro: msg }
         })
-      }
-    });
-  }
-
-  carregarAnotacoesAtendimento(id: number){
-    this.anotacoesService.buscaAnotacoesIdAtendimento(id).subscribe({
-      next: (res: any) => {
-        const listaAnotacoes = res?.anotacoes || (Array.isArray(res) ? res: []);
-        this.anotacoes.set(listaAnotacoes);
-        this.isLoading.set(false);
-      },
-      error: (err) =>{
-        this.anotacoes.set([]);
-        this.isLoading.set(false);
       }
     });
   }
@@ -91,22 +82,46 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
     })
   }
 
-  carregarAnexos(id: number){
-    this.atendimentoAnexoService.listarAnexosPorAtendimento(id).subscribe({
-      next: (res) => {
-        this.anexos.set(res.anexos || []);
-      },
-      error: (err) => {
-        //console.error('Erro ao carregar anexos: ', err)
-      }
-    });
-  }
-
   baixarAnexo(id: number, nome: string){
     this.atendimentoAnexoService.downloadAnexo(id, nome);
   }
 
-  // Formata o texto que vem da API no campo estado 
+  // Captura o arquivo quando usuário escolhe na janela do sistema
+  onFileSelected(event: any): void{
+    const file: File = event.target.files[0];
+    if(file){
+      this.arquivoSelecionado = file;
+    }else{
+      this.arquivoSelecionado = null;
+    }
+  }
+
+  //Dispara a requisição de upload para o backend
+  enviarArquivo(): void{
+    if(!this.arquivoSelecionado) return;
+    this.atendimentoAnexoService.uploadAnexo(this.arquivoSelecionado).subscribe({
+      next: (res) => {
+        this.alert.successModal('Arquivo enviado', 'Arquivo enviado e salvo com sucesso!');
+
+        // Limpa a seleção e o input file visualmente
+        this.arquivoSelecionado = null;
+        const fileInput = document.getElementById('inputGroupFile') as HTMLInputElement;
+        if(fileInput) fileInput.value = '';
+
+        // Recarrega a lista de anexos para o novo arquivo ser exibido
+        const idParam = this.route.snapshot.paramMap.get('id');
+        if(idParam){
+          this.carregarDadosAtendimento(Number(idParam));
+        }
+      },
+      error: (err) => {
+        const mensagem = err.error?.message || err.error?.detail || 'Erro no upload de arquivo';
+        this.alert.errorModal('Atenção', mensagem);
+      }
+    });
+  }
+
+  // Formata o texto que vem da API no campo estado
   formatarDescricaoEstado(descricao: string): string{
     if(!descricao) return 'Desconhecido';
 

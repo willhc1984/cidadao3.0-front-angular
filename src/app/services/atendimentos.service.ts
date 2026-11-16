@@ -11,6 +11,7 @@ export class AtendimentosService {
 
   private http = inject(HttpClient);
   private readonly API_URL = 'http://localhost:8081/atendimentos/cidadao/meus-atendimentos';
+  private readonly API_URL_UPDATE = ''
 
   constructor() { }
 
@@ -18,7 +19,6 @@ export class AtendimentosService {
     const params = new HttpParams()
       .set('page', page)
       .set('pageLength', pageLength);
-    
       return this.http.get<PageResponse<any>>(this.API_URL, { params });
   }
 
