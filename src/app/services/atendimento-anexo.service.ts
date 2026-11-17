@@ -13,11 +13,6 @@ export class AtendimentoAnexoService {
 
   constructor() { }
 
-  // Consome o endpoint: @GetMapping("/byatendimento/{id}")
-  listarAnexosPorAtendimento(atendimentoId: number): Observable<any> {
-    return this.http.get<any>(`${this.API_URL}/byatendimento/${atendimentoId}`);
-  }
-
   // Endpoint de exclusão de anexo do atendimento
   excluirAnexoAtendimento(idAnexoAtendimento: number): Observable<void>{
     return this.http.delete<void>(`${this.API_URL}/${idAnexoAtendimento}`);

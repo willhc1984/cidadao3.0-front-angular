@@ -14,7 +14,6 @@ export class AuthenticationService {
 
   // URL do backend
   private readonly API_URL = 'http://localhost:8081/authenticate';
-  private readonly CIDADAO_URL = 'http://localhost:8081/cidadaos';
 
   // Guarda o token na memoria quando login da certo
   token: string | null = null;
@@ -28,36 +27,10 @@ export class AuthenticationService {
     );
   }
 
-  // Verifica se usuário é um cidadão válido no sistema
-  // verificarVinculoCidadao(loginUsuario: string): Observable<boolean>{
-  //   return this.http.get<any>(this.CIDADAO_URL).pipe(
-  //     map((res) => {
-  //       const listaCidadaos = Array.isArray(res) ? res : (res?.elements || []);
-  //       const cidadaoVinculado = listaCidadaos.find(
-  //         (c: any) => c.usuarioLogin === loginUsuario,
-  //       );
-
-  //       if(cidadaoVinculado){
-  //         localStorage.setItem('usuario_login', loginUsuario);
-  //         localStorage.setItem('usuario_nome', cidadaoVinculado.pronomeDeTratamento + ' ' + cidadaoVinculado.nome);
-
-  //         if(cidadaoVinculado.fotoFile && cidadaoVinculado.fotoFile.base64Content){
-  //           localStorage.setItem('foto_cidadao', cidadaoVinculado.fotoFile.base64Content);
-  //         }
-          
-  //         return true;
-          
-  //       }else{
-  //         this.logout(); //Remove token se não for cidadão válido
-  //         throw new Error('Acesso negado: usuário não é um cidadão válido no sistema.');
-  //       }
-  //     })
-  //   );
-  // }
-
   logout(){
     this.token = null;
     localStorage.removeItem('jwt_token');
+    localStorage.removeItem('possui_role');
     localStorage.removeItem('usuario_login');
     localStorage.removeItem('usuario_nome');
     localStorage.removeItem('foto_cidadao');

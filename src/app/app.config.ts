@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
+import { cidadaoRoleInterceptor } from './interceptors/cidadao-role.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: 
@@ -12,7 +13,10 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([authInterceptor])
+      withInterceptors([
+        authInterceptor, 
+        cidadaoRoleInterceptor
+      ])
     ),
     provideEnvironmentNgxMask()
   ]

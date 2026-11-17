@@ -34,8 +34,6 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
     if(idParam){
       const id = Number(idParam);
       this.carregarDadosAtendimento(id);
-      //this.carregarAnexos(id);
-      //this.carregarAnotacoesAtendimento(id);
     }
   }
 
@@ -44,9 +42,7 @@ export class MeusAtendimentosDetalhesComponent implements OnInit{
       next: (res) => {
         this.atendimento.set(res);
         this.anexos.set(res.anexos || []);
-        console.log(res.anexos)
         this.anotacoes.set(res.anotacoes);
-        console.log(res.anotacoes);
         this.isLoading.set(false);
       },
       error: (err) => {

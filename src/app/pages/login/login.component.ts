@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { switchMap } from 'rxjs';
+import { SweetAlertService } from '../../services/sweet-alert.service';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,7 @@ export class LoginComponent {
   private authService = inject(AuthenticationService);
   private router = inject(Router);
   private http = inject(HttpClient);
+  private alert = inject(SweetAlertService);
 
   // Signals para guardar os campos do formulário
   login = signal('');
@@ -35,23 +37,29 @@ export class LoginComponent {
     };
 
     // Faz autenticação obtendo token, depois valida se é cidadao usando switchMap
-    this.authService.authenticate(credentials).subscribe({
-      next: () => {
+    this.authService.authenticate(credentials).pipe(
+      switchMap((res: any) => {
+        // Salva o token para que a proxima requisição ja saia com o token atrelado
+        localStorage.setItem('jwt_token', res.token);
+        // Consulta o endpoint de verificação de role
+        return this.http.get<any>('http://localhost:8081/usuarios/hasrole/ROLE_CIDADAO');
+      })
+    ).subscribe({
+      next: (roleResponse: any) => {
+        const possuiRole = roleResponse?.result === true;
+
+        if(possuiRole){
+          // Somente navega para dentro quem tiver a role confirmada
+          this.router.navigate(['/meus-atendimentos']);
+        }
         this.isLoading.set(false);
-        this.router.navigate(['/home']); // Sucesso total e redirecionamento
       },
       error: (err) => {
+        localStorage.removeItem('jwt_token');
+        localStorage.removeItem('possui_role');
+        this.alert.errorModal('Erro', 'Falha na autenticação ou verificação de permissões.');
         this.isLoading.set(false);
-        if(err.status == 401){
-          this.errorMessage.set('Usuário ou senha inválidos.');
-        }else if(err.status === 0){
-          this.errorMessage.set('Não foi possivel conectar ao servidor.');
-        }else{ 
-          // Exibe msg de erro vinda da validação do cidadão
-          this.errorMessage.set(err.message || 'Ocorreu um erro inesperado.');
-        }
       }
     });
   }
-
 }
