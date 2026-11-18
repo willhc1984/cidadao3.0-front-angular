@@ -29,19 +29,26 @@ export class HeaderComponent implements OnInit{
     this.carregarDadosUsuario();
   }
 
-  carregarDadosUsuario() {
-    // Resgata nome salvo no localStorage
-    const nome = localStorage.getItem('usuario_nome') || 'Cidadão';
-    const fotoSalva = localStorage.getItem('foto_cidadao');
-    this.nomeUsuario.set(nome);
+  carregarDadosUsuario(): void {
+    this.authService.getDadosCidadao().subscribe({
+      next: (dados) => {
+        if(dados.nome){
+          this.nomeUsuario.set(dados.pronomeDeTratamento + ' ' + dados.nome);
+        }
 
-    if(fotoSalva && fotoSalva !== '[object Object]'){
-      const fotoFormatada = fotoSalva.startsWith('data:image')
-      ? fotoSalva 
-      : `data:image/jpeg;base64,${fotoSalva}`;
-    
-      this.fotoUsuario.set(fotoFormatada);
-    }
+        if(dados.fotoBase64 && dados.fotoContentType){
+          const dataUrl = `data:${dados.fotoContentType}; base64, ${dados.fotoBase64}`;
+          this.fotoUsuario.set(dataUrl);
+          localStorage.setItem('foto_cidadao', dataUrl);
+        }else{
+          this.fotoUsuario.set('images/user.jpg');
+          localStorage.removeItem('foto_cidadao');
+        }
+      },
+      error: () => {
+        // Fallback padrão silencioso
+      }
+    });
   }
 
   logout(){

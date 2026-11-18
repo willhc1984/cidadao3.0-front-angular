@@ -36,4 +36,8 @@ export class AuthenticationService {
     localStorage.removeItem('foto_cidadao');
   }
 
+  // Endpoint dos dados do cidadao logado
+  getDadosCidadao(): Observable<{ nome: string; fotoBase64: string | null; fotoContentType: string | null; pronomeDeTratamento: String | null}>{
+    return this.http.get<any>('http://localhost:8081/atendimentos/cidadao/dados');
+  }
 }
